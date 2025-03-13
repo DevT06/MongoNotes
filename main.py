@@ -1,8 +1,29 @@
 import shlex
+import repositories as repo
+import utility as utils
+
+note_repo = repo.note_repo
+
+user_repo = repo.user_repo
+
+display = utils.display_utils
 
 def get(args):
-    pass
-
+    if len(args) == 1:
+        match args[0]:
+            case "notes":
+                notes = note_repo.get_all_notes()
+                for note in notes:
+                    display.format_note(note)
+            case "users":
+                users = user_repo.get_all_users()
+                for user in users:
+                    display.format_user(user)
+            case _:
+                print("Invalid arguments")
+                return
+        # todo
+        
 def edit(args):
     pass
 
@@ -24,5 +45,8 @@ if __name__ == "__main__":
                 delete(parts)
             case "exit":
                 exit(0)
+            case "help":
+                print("Commands: get, edit, delete, exit")
+                # add options for each command
             case _:
                 print("Invalid command")
