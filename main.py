@@ -2,25 +2,30 @@ import shlex
 
 from db import mongo_db
 
-#init connection
-mongo_db.connent()
+def get(args):
+    pass
 
-is_running = True
+def edit(args):
+    pass
 
-while is_running:
-    entered_value = input("MongoNotes: ")
-    args = shlex.split(entered_value)
-    cmd = args.pop(0)
-    match cmd.lower():
-        case "get":
+def delete(args):
+    pass
 
-            break
-        case "edit":
-
-            break
-        case "delete":
-
-            break
-        case "exit":
-
-            break
+if __name__ == "__main__":
+    # mongo_db.connent()
+    is_running = True
+    while is_running:
+        entered_value = input("MongoNotes: ")
+        args = shlex.split(entered_value)
+        cmd = args.pop(0)
+        match cmd.lower():
+            case "get":
+                get(args)
+            case "edit":
+                edit(args)
+            case "delete":
+                delete(args)
+            case "exit":
+                exit(0)
+            case _:
+                print("No")
