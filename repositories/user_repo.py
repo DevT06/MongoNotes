@@ -23,13 +23,12 @@ def add(name, password, is_admin):
             }
     users.insert_one(user)
 
-def update_by_id(id, name, password, is_admin):
+def update_user_by_id(id, name=None, password=None, is_admin=None):
     user = get_by_id(id)
-    
     updated_user = {
-        "name": name if name != user["name"] else user["name"],
-        "password": password if password != user["password"] else user["password"],
-        "is_admin": is_admin if is_admin != user["is_admin"] else user["is_admin"]
+        "name": user["name"] if name is None else name,
+        "password": user["password"] if password is None else password,
+        "is_admin": user["is_admin"] if is_admin is None else is_admin
     }
 
     users.update_one({"_id": id}, {"$set": updated_user})

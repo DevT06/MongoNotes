@@ -25,26 +25,23 @@ def add(title, content, weight, status, tags, owner_id):
             "updated_at": datetime.datetime.now(),
             "weight": weight,
             "status": status,
-            "tags": tags, # list of tags
+            "tags": tags,  # list of tags
             "owner_id": owner_id
             }
     notes.insert_one(note)
 
-def update_by_id(id, title, content, weight, status, tags):
-    note = get_by_id(id)
-    
-    # update the tag logic later
-
+def update_by_id(id, title=None, content=None, weight=None, status=None, tags=None):
+    note = get_note_by_id(id)
     updated_note = {
-        "title": title if title != note["title"] else note["title"],
-        "content": content if content != note["content"] else note["content"],
-        "updated_at": datetime.datetime.now(),
-        "weight": weight if weight != note["weight"] else note["weight"],
-        "status": status if status != note["status"] else note["status"],
-        "tags": tags if tags != note["tags"] else note["tags"]
+        "title": note["title"] if title is None else title,
+        "content": note["content"] if content is None else content,
+        "weight": note["weight"] if weight is None else weight,
+        "status": note["status"] if status is None else status,
+        "tags": note["tags"] if tags is None else tags,
+        "updated_at": datetime.datetime.now()
     }
-
     notes.update_one({"_id": id}, {"$set": updated_note})
-    
+    # update the tag logic later
+ 
 def delete_by_id(id):
     notes.delete_one({"_id": id})
