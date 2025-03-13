@@ -3,6 +3,15 @@ import datetime
 
 notes = mongo_db.notes
 
+def get_all_notes():
+    return notes.find()
+
+def get_notes_by_title(title):
+    return notes.find({"title": title})
+
+def get_note_by_id(id):
+    return notes.find_one({"_id": id})
+
 def add_note(title, content, weight, status, tags, owner_id):
     note = {"title": title, 
             "content": content, 
@@ -14,15 +23,6 @@ def add_note(title, content, weight, status, tags, owner_id):
             "owner_id": owner_id
             }
     notes.insert_one(note)
-
-def get_all_notes():
-    return notes.find()
-
-def get_notes_by_title(title):
-    return notes.find({"title": title})
-
-def get_note_by_id(id):
-    return notes.find_one({"_id": id})
 
 def update_note_by_id(id, title, content, weight, status, tags):
     note = get_note_by_id(id)
