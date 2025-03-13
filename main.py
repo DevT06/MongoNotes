@@ -1,6 +1,7 @@
 import shlex
 import repositories as repo
 import utility as utils
+import os
 
 note_repo = repo.note_repo
 
