@@ -4,35 +4,20 @@ import utility as utils
 import os
 
 note_repo = repo.note_repo
-
 user_repo = repo.user_repo
 
 display = utils.display_utils
-
-def get(args):
-    if len(args) == 1:
-        match args[0]:
-            case "notes":
-                notes = note_repo.get_all_notes()
-                for note in notes:
-                    display.format_note(note)
-            case "users":
-                users = user_repo.get_all_users()
-                for user in users:
-                    display.format_user(user)
-            case _:
-                print("Invalid arguments")
-                return
+crud = utils.crud_utils
 
 def edit(args):
     if len(args) != 2:
         print("Requires at least two arguments: collection and id")
         return
     else:
+
         collection = args.pop(0)
         id = args.pop(0)
         # values = args_to_dict()
-
 
 def delete(args):
     pass
@@ -45,7 +30,7 @@ if __name__ == "__main__":
         cmd = parts.pop(0)
         match cmd:
             case "get":
-                get(parts)
+                crud.get(parts)
             case "edit":
                 edit(parts)
             case "delete":
