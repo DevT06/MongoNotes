@@ -1,2 +1,2 @@
 # MongoNotes
-MongoNotes is a cli note capturing app 
+MongoNotes is a cli note capturing app
