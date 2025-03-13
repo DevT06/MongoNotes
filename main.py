@@ -23,7 +23,6 @@ def get(args):
             case _:
                 print("Invalid arguments")
                 return
-        # todo
 
 def edit(args):
     if len(args) != 2:
@@ -35,15 +34,10 @@ def edit(args):
         match collection:
             case "user":
                 user = user_repo.get_user_by_id(id)
-                edit_dict(user)
+                edit_user(user)
             case "note":
                 note = note_repo.get_note_by_id(id)
-                edit_dict(note)
-
-
-def edit_dict(dict):
-    os.system('cls')
-    print("[Object object]")
+                edit_note(note)
 
 
 def delete(args):
