@@ -1,10 +1,15 @@
 from utility.display_utils import format_note
 
 
+# WIP
+
+
+
 def edit_note(note):
+
     while True:
         format_note(note)
-
+        action = input("Action: ")
         return f"""
         Title: {note.get('title')}
         Content: {note.get('content')}

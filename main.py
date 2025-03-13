@@ -26,18 +26,12 @@ def get(args):
 
 def edit(args):
     if len(args) != 2:
-        print("Requires two arguments: collection and id")
+        print("Requires at least two arguments: collection and id")
         return
     else:
-        collection = args[0]
-        id = args[1]
-        match collection:
-            case "user":
-                user = user_repo.get_user_by_id(id)
-                edit_user(user)
-            case "note":
-                note = note_repo.get_note_by_id(id)
-                edit_note(note)
+        collection = args.pop(0)
+        id = args.pop(0)
+        # values = args_to_dict()
 
 
 def delete(args):
