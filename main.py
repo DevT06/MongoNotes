@@ -23,9 +23,27 @@ def get(args):
                 print("Invalid arguments")
                 return
         # todo
-        
+
 def edit(args):
-    pass
+    if len(args) != 2:
+        print("Requires two arguments: collection and id")
+        return
+    else:
+        collection = args[0]
+        id = args[1]
+        match collection:
+            case "user":
+                user = user_repo.get_user_by_id(id)
+                edit_dict(user)
+            case "note":
+                note = note_repo.get_note_by_id(id)
+                edit_dict(note)
+
+
+def edit_dict(dict):
+    os.system('cls')
+    print("[Object object]")
+
 
 def delete(args):
     pass
