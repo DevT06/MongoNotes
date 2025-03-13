@@ -3,16 +3,22 @@ import datetime
 
 notes = mongo_db.notes
 
-def get_all_notes():
+def get_all():
     return notes.find()
 
-def get_notes_by_title(title):
+def get_by_title(title):
     return notes.find({"title": title})
 
-def get_note_by_id(id):
+def get_by_id(id):
     return notes.find_one({"_id": id})
 
-def add_note(title, content, weight, status, tags, owner_id):
+def get_by_search_index(search):
+    return notes.find({"$text": {"$search": search}})
+
+def get_by_search(searchQuery):
+    return notes.find(searchQuery)
+
+def add(title, content, weight, status, tags, owner_id):
     note = {"title": title, 
             "content": content, 
             "created_at": datetime.datetime.now(),
@@ -24,8 +30,8 @@ def add_note(title, content, weight, status, tags, owner_id):
             }
     notes.insert_one(note)
 
-def update_note_by_id(id, title, content, weight, status, tags):
-    note = get_note_by_id(id)
+def update_by_id(id, title, content, weight, status, tags):
+    note = get_by_id(id)
     
     # update the tag logic later
 
@@ -40,5 +46,5 @@ def update_note_by_id(id, title, content, weight, status, tags):
 
     notes.update_one({"_id": id}, {"$set": updated_note})
     
-def delete_note_by_id(id):
+def delete_by_id(id):
     notes.delete_one({"_id": id})
