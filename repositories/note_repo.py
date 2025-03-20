@@ -31,7 +31,7 @@ def add(title, content, weight, status, tags, owner_id):
     notes.insert_one(note)
 
 def update_by_id(id, title=None, content=None, weight=None, status=None, tags=None):
-    note = get_note_by_id(id)
+    note = get_by_id(id)
     updated_note = {
         "title": note["title"] if title is None else title,
         "content": note["content"] if content is None else content,
