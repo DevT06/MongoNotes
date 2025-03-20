@@ -1,5 +1,6 @@
 from db import mongo_db
 import datetime
+import utility.auto_increment as auto_increment
 
 notes = mongo_db.notes
 
@@ -19,15 +20,17 @@ def get_by_search(searchQuery):
     return notes.find(searchQuery)
 
 def add(title, content, weight, status, tags, owner_id):
-    note = {"title": title, 
-            "content": content, 
-            "created_at": datetime.datetime.now(),
-            "updated_at": datetime.datetime.now(),
-            "weight": weight,
-            "status": status,
-            "tags": tags,  # list of tags
-            "owner_id": owner_id
-            }
+    note = {
+        "_id": auto_increment.get_next_sequence("Notes"),
+        "title": title,
+        "content": content,
+        "created_at": datetime.datetime.now(),
+        "updated_at": datetime.datetime.now(),
+        "weight": weight,
+        "status": status,
+        "tags": tags,  # list of tags
+        "owner_id": owner_id
+    }
     notes.insert_one(note)
 
 def update_by_id(id, title=None, content=None, weight=None, status=None, tags=None):

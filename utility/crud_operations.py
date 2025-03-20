@@ -45,15 +45,15 @@ def get(args):
                 print("Invalid collection")
 
 def delete(args):
-    try:
-        object_id = ObjectId(args[1])  # Convert the string ID to ObjectId
-    except Exception as e:
-        print(f"Invalid ID format: {e}")
-        return
+    # try:
+    #     object_id = ObjectId(args[1])  # Convert the string ID to ObjectId
+    # except Exception as e:
+    #     print(f"Invalid ID format: {e}")
+    #     return
 
     if args[0] == "note":
-        note_repo.delete_by_id(object_id)
+        note_repo.delete_by_id(args[1])
     elif args[0] == "user":
-        user_repo.delete_by_id(object_id)
+        user_repo.delete_by_id(args[1])
     else:
         print("Invalid collection type")

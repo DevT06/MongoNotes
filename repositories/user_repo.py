@@ -1,5 +1,6 @@
 from db import mongo_db
 import datetime
+import utility.auto_increment as auto_increment
 
 users = mongo_db.users
 
@@ -16,11 +17,13 @@ def get_by_search(searchQuery):
     return users.find(searchQuery)
 
 def add(name, password, is_admin):
-    user = {"name": name,
-            "password": password,
-            "is_admin": is_admin,
-            "created_at": datetime.datetime.now()
-            }
+    user = {
+        "_id": auto_increment.get_next_sequence("Users"),
+        "name": name,
+        "password": password,
+        "is_admin": is_admin,
+        "created_at": datetime.datetime.now()
+    }
     users.insert_one(user)
 
 def update_user_by_id(id, name=None, password=None, is_admin=None):

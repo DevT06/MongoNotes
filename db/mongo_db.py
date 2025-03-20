@@ -9,3 +9,4 @@ db = client["MongoNotes"]
 # Create a collections
 notes = db["Notes"] # has Tags
 users = db["Users"]
+counters = db["Counters"]
