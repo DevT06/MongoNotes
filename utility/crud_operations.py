@@ -1,3 +1,4 @@
+from bson import ObjectId
 import repositories as repo
 import utility as utils
 
@@ -42,3 +43,17 @@ def get(args):
                     print(display.format_user(user))
             case _:
                 print("Invalid collection")
+
+def delete(args):
+    try:
+        object_id = ObjectId(args[1])  # Convert the string ID to ObjectId
+    except Exception as e:
+        print(f"Invalid ID format: {e}")
+        return
+
+    if args[0] == "note":
+        note_repo.delete_by_id(object_id)
+    elif args[0] == "user":
+        user_repo.delete_by_id(object_id)
+    else:
+        print("Invalid collection type")

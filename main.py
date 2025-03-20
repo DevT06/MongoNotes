@@ -34,7 +34,7 @@ if __name__ == "__main__":
             case "edit":
                 edit(parts)
             case "delete":
-                delete(parts)
+                crud.delete(parts)
             case "exit":
                 exit(0)
             case "help":
