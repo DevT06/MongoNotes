@@ -26,6 +26,16 @@ def add(name, password, is_admin):
     }
     users.insert_one(user)
 
+def add_with_id(id, name, password, is_admin, created_at):
+    user = {
+        "_id": id,
+        "name": name,
+        "password": password,
+        "is_admin": is_admin,
+        "created_at": created_at
+    }
+    users.insert_one(user)
+
 def update_user_by_id(id, name=None, password=None, is_admin=None):
     user = get_by_id(id)
     updated_user = {
