@@ -13,6 +13,9 @@ def get_by_name(name):
 def get_by_id(id):
     return users.find_one({"_id": id}, {"password": 0})
 
+def get_by_id_with_password(id):
+    return users.find_one({"_id": id})
+
 def get_by_search(searchQuery):
     return users.find(searchQuery)
 
@@ -40,9 +43,11 @@ def update_user_by_id(id, name=None, password=None, is_admin=None):
     user = get_by_id(id)
     updated_user = {
         "name": user["name"] if name is None else name,
-        "password": user["password"] if password is None else password,
-        "is_admin": user["is_admin"] if is_admin is None else is_admin
+        "password": user["password"] if password is None else password
     }
+
+    if is_admin is not None:
+        updated_user["is_admin"] = is_admin
 
     users.update_one({"_id": id}, {"$set": updated_user})
 

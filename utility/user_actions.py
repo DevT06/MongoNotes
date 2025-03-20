@@ -1,14 +1,6 @@
-import repositories as repo
+from repositories import note_repo, user_repo
+from utility import display_utils, crud_operations, edit_utils, help
 import utility as utils
-
-note_repo = repo.note_repo
-user_repo = repo.user_repo
-
-display = utils.display_utils
-crud = utils.crud_operations
-edit_utils = utils.edit_utlis
-help_utils = utils.help
-
 
 def setup():
     # Check if user with ID 1 exists
@@ -22,7 +14,7 @@ def setup():
         print(f"User '{name}' created successfully with ID 1.")
 
     # Check if admin password for user with ID 2 is set
-    admin_user = user_repo.get_by_id(2)
+    admin_user = user_repo.get_by_id_with_password(2)
     if admin_user and not admin_user.get("password"):
         print("Admin password for user with ID 2 is not set.")
         password = input("Set admin password: ")
@@ -43,7 +35,7 @@ def delete_with_admin_password(args):
 
     if collection == "note":
         admin_password = input("Enter admin password: ")
-        admin_user = user_repo.get_by_id(2)
+        admin_user = user_repo.get_by_id_with_password(2)
         if admin_user and admin_user.get("password") == admin_password:
             if note_repo.get_by_id(id):
                 note_repo.delete_by_id(id)

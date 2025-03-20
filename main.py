@@ -1,16 +1,10 @@
 import shlex
-import repositories as repo
-import utility as utils
+import os
+from repositories import note_repo, user_repo
+from utility import display_utils, crud_operations, edit_utils, help, user_actions
 import os
 
-note_repo = repo.note_repo
-user_repo = repo.user_repo
 
-display = utils.display_utils
-crud = utils.crud_operations
-edit_utils = utils.edit_utlis
-help_utils = utils.help
-user_actions = utils.user_actions
 
 def edit(args):
     if len(args) != 2:
@@ -36,6 +30,7 @@ if __name__ == "__main__":
     print("Type 'help' for available commands")
     
     user_actions.setup()
+    # login later
 
     is_running = True
     while is_running:
@@ -49,9 +44,9 @@ if __name__ == "__main__":
             cmd = parts.pop(0)
             match cmd:
                 case "get":
-                    crud.get(parts)
+                    crud_operations.get(parts)
                 case "add":
-                    crud.add(parts)
+                    crud_operations.add(parts)
                 case "edit":
                     edit(parts)
                 case "delete":
@@ -60,7 +55,7 @@ if __name__ == "__main__":
                     print("Goodbye!")
                     is_running = False
                 case "help":
-                    help_utils.show_help()
+                    help.show_help()
                 case _:
                     print(f"Invalid command: {cmd}")
                     print("Type 'help' for available commands")
