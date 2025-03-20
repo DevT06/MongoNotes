@@ -1,29 +1,13 @@
-from utility.display_utils import format_note
+from utility.display_utils import format_note, format_user
 
 
 # WIP
 
 
-
 def edit_note(note):
-
     while True:
         format_note(note)
-        action = input("Action: ")
-        return f"""
-        Title: {note.get('title')}
-        Content: {note.get('content')}
-        Created At: {note.get('created_at')}
-        Updated At: {note.get('updated_at')}
-        Weight: {note.get('weight')}
-        Status: {note.get('status')}
-        Tags: {', '.join(note.get('tags', []))}
-        Owner ID: {note.get('owner_id')}
-        """
+        edit_attribute()
 
 def edit_user(user):
-    return f"""
-    Name: {user.get('name')}
-    Is Admin: {user.get('is_admin')}
-    Created At: {user.get('created_at')}
-    """
+    format_user(user)
