@@ -34,32 +34,57 @@ def get(args):
                 
             key, value = arg.split(":", 1)
             # Convert special keys
-            if key == "ca":
-                key = "created_at"
-            elif key == "ua":
-                key = "updated_at"
-            elif key == "id":
-                key = "_id"
-                try:
-                    value = int(value)
-                except ValueError:
-                    print(f"ID must be an integer: {value}")
-                    return
-            elif key == "tag":
-                # Search for notes with a specific tag title
-                key = "tags.title"
-                
-            query[key] = value
+            match key:
+                case "ca":
+                    key = "created_at"
+                case "ua":
+                    key = "updated_at"
+                case "id":
+                    key = "_id"
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        print(f"ID must be an integer: {value}")
+                        return
+                case "tag":
+                    # Search for notes with a specific tag title
+                    key = "tags.title"
+                case "tag.ca":
+                    # Search for notes with a specific tag created_at date
+                    key = "tags.created_at"
+                case "owner":
+                    # Search for notes with a specific owner ID
+                    key = "owner_id"
+                    try:
+                        value = int(value)
+                    except ValueError:
+                        print(f"Owner ID must be an integer: {value}")
+                        return
+                case "admin":
+                    # Search for users with admin status
+                    key = "is_admin"
+                    value = bool(value) # doesnt work properly
+
+            if isinstance(value, str):
+                query[key] = {"$regex": f".*{value}.*", "$options": "i"}  # Case-insensitive regex
+            elif isinstance(value, bool):
+                query[key] = value
+            else:
+                query[key] = value
 
         match collection:
             case "notes":
                 notes = note_repo.get_by_search(query)
                 for note in notes:
                     print(display.format_note(note))
+                if notes is None:
+                    print("No notes found")
             case "users":
                 users = user_repo.get_by_search(query)
                 for user in users:
                     print(display.format_user(user))
+                if users is None:
+                    print("No users found")
             case _:
                 print("Invalid collection. Use 'notes' or 'users'")
 
