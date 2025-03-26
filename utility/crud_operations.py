@@ -63,7 +63,17 @@ def get(args):
                 case "admin":
                     # Search for users with admin status
                     key = "is_admin"
-                    value = bool(value) # doesnt work properly
+                    if value == "true":
+                        value = True
+                        query[key] = value
+                    elif value == "false":
+                        # Find documents where is_admin is false or doesn't exist
+                        query["$or"] = [
+                            {"is_admin": False},
+                            {"is_admin": {"$exists": False}}
+                        ]
+                        # Skip the default query assignment below
+                        continue
 
             if isinstance(value, str):
                 query[key] = {"$regex": f".*{value}.*", "$options": "i"}  # Case-insensitive regex
@@ -111,7 +121,7 @@ def add(args):
         content = input("Enter note content: ")
         weight = int(input("Enter note weight (1-5): "))
         status = input("Enter note status (draft/active/archived): ")
-        tags_input = input("Enter tags (comma separated): ")
+        tags_input = input("Enter tags (comma separated) [TagName:d=\"Description\"]: ")
         tags = [tag.strip() for tag in tags_input.split(",") if tag.strip()]
         owner_id = int(input("Enter owner ID: "))
         

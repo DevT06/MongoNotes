@@ -115,15 +115,25 @@ def update_by_id(id, title=None, content=None, weight=None, status=None, tags=No
     elif tags is not None:
         existing_tags = note.get("tags", [])
         updated_tags = []
-
-        # Remove tags with "rm:" prefix and add new tags
+        
+        # Track tag titles that will be updated to avoid duplicates
+        tag_titles_to_update = set()
+        
+        # First pass: identify tags to be removed or replaced
         for tag_input in tags:
             if tag_input.startswith("rm:"):
                 tag_to_remove = tag_input[3:]  # Remove "rm:" prefix
-                existing_tags = [
-                    tag for tag in existing_tags if tag["title"] != tag_to_remove
-                ]
+                tag_titles_to_update.add(tag_to_remove)
             else:
+                tag_title = tag_input.split(":d=")[0].strip() if ":d=" in tag_input else tag_input
+                tag_titles_to_update.add(tag_title)
+        
+        # Filter out existing tags that will be replaced
+        existing_tags = [tag for tag in existing_tags if tag["title"] not in tag_titles_to_update]
+        
+        # Second pass: add new tags
+        for tag_input in tags:
+            if not tag_input.startswith("rm:"):
                 # Check if the tag has a description specification
                 if ":d=" in tag_input:
                     # Split the tag input into title and description
@@ -146,8 +156,8 @@ def update_by_id(id, title=None, content=None, weight=None, status=None, tags=No
                         "title": tag_input,
                         "created_at": datetime.datetime.now()
                     })
-
-        # Append new tags to the existing ones
+        
+        # Combine existing (filtered) and new tags
         existing_tags.extend(updated_tags)
         set_fields["tags"] = existing_tags
 

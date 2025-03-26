@@ -3,7 +3,10 @@ def format_note(note):
     tag_list = []
     for tag in note.get('tags', []):
         if isinstance(tag, dict):
-            tag_list.append(f"{tag.get('title')} (created At: {tag.get('created_at')})")
+            tag_list.append(f""" 
+        Title: {tag.get('title')} 
+        Created At: {tag.get('created_at')}
+        Description: {tag.get('description') if tag.get('description') else 'None'}""")
         else:
             tag_list.append(str(tag))
     
@@ -15,8 +18,8 @@ def format_note(note):
     Updated At: {note.get('updated_at')}
     Weight: {note.get('weight')}
     Status: {note.get('status')}
-    Tags: {', '.join(tag_list) if tag_list else 'None'}
     Owner ID: {note.get('owner_id')}
+    Tags: {', \n'.join(tag_list) if tag_list else 'None'}
     """
 
 def format_user(user):
