@@ -22,11 +22,30 @@ def get_by_search(searchQuery):
 def add(title, content, weight, status, tags, owner_id):
     # Create tag objects for each tag title
     tag_objects = []
-    for tag_title in tags:
-        tag_object = {
-            "title": tag_title,
-            "created_at": datetime.datetime.now()
-        }
+    for tag_input in tags:
+        # Check if the tag has a description specification
+        if ":d=" in tag_input:
+            # Split the tag input into title and description
+            tag_parts = tag_input.split(":d=", 1)
+            tag_title = tag_parts[0].strip()
+            
+            # Extract description, handling quoted text properly
+            description = tag_parts[1].strip()
+            if description.startswith('"') and description.endswith('"'):
+                description = description[1:-1]  # Remove surrounding quotes
+            
+            tag_object = {
+                "title": tag_title,
+                "description": description,
+                "created_at": datetime.datetime.now()
+            }
+        else:
+            # Regular tag without description
+            tag_object = {
+                "title": tag_input,
+                "created_at": datetime.datetime.now()
+            }
+        
         tag_objects.append(tag_object)
     
     note = {
@@ -98,16 +117,35 @@ def update_by_id(id, title=None, content=None, weight=None, status=None, tags=No
         updated_tags = []
 
         # Remove tags with "rm:" prefix and add new tags
-        for tag_title in tags:
-            if tag_title.startswith("rm:"):
-                tag_to_remove = tag_title[3:]  # Remove "rm:" prefix
+        for tag_input in tags:
+            if tag_input.startswith("rm:"):
+                tag_to_remove = tag_input[3:]  # Remove "rm:" prefix
                 existing_tags = [
                     tag for tag in existing_tags if tag["title"] != tag_to_remove
                 ]
             else:
-                updated_tags.append(
-                    {"title": tag_title, "created_at": datetime.datetime.now()}
-                )
+                # Check if the tag has a description specification
+                if ":d=" in tag_input:
+                    # Split the tag input into title and description
+                    tag_parts = tag_input.split(":d=", 1)
+                    tag_title = tag_parts[0].strip()
+                    
+                    # Extract description, handling quoted text properly
+                    description = tag_parts[1].strip()
+                    if description.startswith('"') and description.endswith('"'):
+                        description = description[1:-1]  # Remove surrounding quotes
+                    
+                    updated_tags.append({
+                        "title": tag_title,
+                        "description": description,
+                        "created_at": datetime.datetime.now()
+                    })
+                else:
+                    # Regular tag without description
+                    updated_tags.append({
+                        "title": tag_input,
+                        "created_at": datetime.datetime.now()
+                    })
 
         # Append new tags to the existing ones
         existing_tags.extend(updated_tags)
