@@ -21,15 +21,18 @@ def edit_note(note_id):
     
     # Edit fields one by one
     title = input(f"Title [{note.get('title', '')}] (leave empty to keep current): ")
-    content = input(f"Content [{note.get('content', '')}] (leave empty to keep current): ")
-    weight_str = input(f"Weight [{note.get('weight', '')}] (leave empty to keep current): ")
-    status = input(f"Status [{note.get('status', '')}] (leave empty to keep current): ")
+    content = input(f"Content [{note.get('content', '')}] (leave empty to keep current, '-' to remove): ")
+    weight_str = input(f"Weight [{note.get('weight', '')}] (leave empty to keep current, '-' to remove): ")
+    status = input(f"Status [{note.get('status', '')}] (leave empty to keep current, '-' to remove): ")
     tags_str = input(f"Tags [{', '.join(tag_titles)}] (leave empty to keep current): ")
     
     # Process inputs (only update if provided)
     title = None if not title else title
     content = None if not content else content
-    weight = None if not weight_str else int(weight_str)
+    if weight_str != "-":
+        weight = None if not weight_str else int(weight_str)
+    else:
+        weight = "-"
     status = None if not status else status
     tags = None if not tags_str else [tag.strip() for tag in tags_str.split(",") if tag.strip()]
     
