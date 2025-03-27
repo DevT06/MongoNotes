@@ -2,10 +2,7 @@
 use MongoNotes;
 
 // Create 'User' collection
-db.createCollection("User");
+db.createCollection("Users");
 
 // Create 'Note' collection
-db.createCollection("Note");
-
-// Create 'Tag' collection
-db.createCollection("Tag");
+db.createCollection("Notes");
