@@ -52,6 +52,15 @@ def get(args):
                 case "tag.ca":
                     # Search for notes with a specific tag created_at date
                     key = "tags.created_at"
+                case "tag ca":
+                    # Search for notes with a specific tag created_at date
+                    key = "tags.created_at"
+                case "tag color":
+                    # Search for notes with a specific tag color
+                    key = "tags.color"
+                case "tag description":
+                    # Search for notes with a specific tag color
+                    key = "tags.description"
                 case "owner":
                     # Search for notes with a specific owner ID
                     key = "owner_id"
