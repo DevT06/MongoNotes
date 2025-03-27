@@ -49,6 +49,7 @@ def login():
         user_id = int(user_id_str)
     except ValueError:
         print(f"User ID must be an integer: {user_id_str}")
+        return
 
     password = input("Enter password: ")
     user = user_repo.get_by_id_with_password(user_id)
