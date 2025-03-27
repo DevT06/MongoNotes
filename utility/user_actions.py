@@ -37,10 +37,10 @@ def setup(is_initial_setup):
     # Check if admin password for user with ID 2 is set
     admin_user = user_repo.get_by_id_with_password(2)
     if admin_user and not admin_user.get("password"):
-        print("Admin password for user with ID 2 is not set.")
+        print("Root admin password for user with ID 2 is not set.")
         password = input("Set admin password: ")
         user_repo.update_user_by_id(2, password=password)
-        print("Admin password set successfully.")
+        print("Root admin password set successfully.")
 
 def login():
     #name = input("Enter user name: ")
@@ -88,7 +88,7 @@ def delete_with_admin_password(args, current_user_id):
     
     # If trying to delete the admin user with ID 2, prevent it regardless of who's trying
     if collection == "user" and id == 2:
-        print("Error: Cannot delete the admin user (ID 2)")
+        print("Error: Cannot delete the root admin user (ID 2)")
         return
     
     # If current user is admin, allow deletion without password
@@ -120,13 +120,13 @@ def delete_with_admin_password(args, current_user_id):
     # Get admin user for authentication
     admin_user = user_repo.get_by_id_with_password(2)
     if not admin_user:
-        print("Admin user not found. Please run setup first.")
+        print("Root admin user not found. Please run setup first.")
         return
 
     # Admin password required
     admin_password = input("Enter admin password: ")
     if admin_user.get("password") != admin_password:
-        print("Invalid admin password.")
+        print("Invalid root admin password.")
         return
         
     # Password verified, proceed with deletion

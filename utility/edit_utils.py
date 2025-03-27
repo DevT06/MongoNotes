@@ -78,16 +78,16 @@ def edit_user(user_id, current_user_id):
                 is_admin = True
     else:
         # Non-admin user - offer option to authenticate with admin password
-        admin_auth = input("Do you want to change admin status? This requires admin authentication (y/n): ")
+        admin_auth = input("Do you want to change admin status? This requires root admin authentication (y/n): ")
         
         if admin_auth.lower() == 'y':
             # Get admin user for authentication
             admin_user = user_repo.get_by_id_with_password(2)
             if not admin_user:
-                print("Admin user not found. Cannot change admin status.")
+                print("Root admin user not found. Cannot change admin status.")
             else:
                 # Request admin password
-                admin_password = input("Enter admin password: ")
+                admin_password = input("Enter root admin password: ")
                 
                 if admin_user.get("password") == admin_password:
                     # Password verified, allow admin status change
@@ -97,10 +97,10 @@ def edit_user(user_id, current_user_id):
                         
                         # Special protection for the admin user (ID 2)
                         if user.get('_id') == 2 and is_admin is False:
-                            print("Error: Cannot remove admin status from user with ID 2")
+                            print("Error: Cannot remove root admin status from user with ID 2")
                             is_admin = True
                 else:
-                    print("Invalid admin password. Admin status cannot be changed.")
+                    print("Invalid root admin password. Admin status cannot be changed.")
         else:
             print("Admin status will remain unchanged.")
     
