@@ -48,11 +48,13 @@ def add_with_id(id, name, password, is_admin, created_at):
     users.insert_one(user)
 
 def update_user_by_id(id, name=None, password=None, is_admin=None):
-    user = get_by_id_with_password(id)
+    user = get_by_id(id)
     updated_user = {
         "name": user["name"] if name is None else name,
-        "password": user["password"] if password is None else password
+        # "password": user["password"] if password is None else password
     }
+    if password is not None:
+        updated_user["password"] = password
 
     set_data = updated_user
     unset_data = {}

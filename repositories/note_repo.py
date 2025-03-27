@@ -23,28 +23,44 @@ def add(title, content, weight, status, tags, owner_id):
     # Create tag objects for each tag title
     tag_objects = []
     for tag_input in tags:
-        # Check if the tag has a description specification
+        # Extract the base tag title before any modifiers
+        base_tag = tag_input.split(":", 1)[0].strip() if ":" in tag_input else tag_input
+        
+        # Initialize tag object with basic properties
+        tag_object = {
+            "title": base_tag,
+            "created_at": datetime.datetime.now()
+        }
+        
+        # Check for description specification (:d=)
         if ":d=" in tag_input:
-            # Split the tag input into title and description
-            tag_parts = tag_input.split(":d=", 1)
-            tag_title = tag_parts[0].strip()
+            # Find the description part
+            desc_start = tag_input.find(":d=") + 3
             
-            # Extract description, handling quoted text properly
-            description = tag_parts[1].strip()
+            # Find the end of the description (next colon or end of string)
+            desc_end = tag_input.find(":", desc_start) if ":" in tag_input[desc_start:] else len(tag_input)
+            
+            description = tag_input[desc_start:desc_end].strip()
+            # Remove surrounding quotes if present
             if description.startswith('"') and description.endswith('"'):
-                description = description[1:-1]  # Remove surrounding quotes
+                description = description[1:-1]
+                
+            tag_object["description"] = description
+        
+        # Check for color specification (:c=)
+        if ":c=" in tag_input:
+            # Find the color part
+            color_start = tag_input.find(":c=") + 3
             
-            tag_object = {
-                "title": tag_title,
-                "description": description,
-                "created_at": datetime.datetime.now()
-            }
-        else:
-            # Regular tag without description
-            tag_object = {
-                "title": tag_input,
-                "created_at": datetime.datetime.now()
-            }
+            # Find the end of the color (next colon or end of string)
+            color_end = tag_input.find(":", color_start) if ":" in tag_input[color_start:] else len(tag_input)
+            
+            color = tag_input[color_start:color_end].strip()
+            # Remove surrounding quotes if present
+            if color.startswith('"') and color.endswith('"'):
+                color = color[1:-1]
+                
+            tag_object["color"] = color
         
         tag_objects.append(tag_object)
     
@@ -125,8 +141,9 @@ def update_by_id(id, title=None, content=None, weight=None, status=None, tags=No
                 tag_to_remove = tag_input[3:]  # Remove "rm:" prefix
                 tag_titles_to_update.add(tag_to_remove)
             else:
-                tag_title = tag_input.split(":d=")[0].strip() if ":d=" in tag_input else tag_input
-                tag_titles_to_update.add(tag_title)
+                # Get the base tag title before any modifiers
+                base_tag = tag_input.split(":", 1)[0].strip() if ":" in tag_input else tag_input
+                tag_titles_to_update.add(base_tag)
         
         # Filter out existing tags that will be replaced
         existing_tags = [tag for tag in existing_tags if tag["title"] not in tag_titles_to_update]
@@ -134,28 +151,46 @@ def update_by_id(id, title=None, content=None, weight=None, status=None, tags=No
         # Second pass: add new tags
         for tag_input in tags:
             if not tag_input.startswith("rm:"):
-                # Check if the tag has a description specification
+                # Extract the base tag title before any modifiers
+                base_tag = tag_input.split(":", 1)[0].strip() if ":" in tag_input else tag_input
+                
+                # Initialize tag object with basic properties
+                tag_object = {
+                    "title": base_tag,
+                    "created_at": datetime.datetime.now()
+                }
+                
+                # Check for description specification (:d=)
                 if ":d=" in tag_input:
-                    # Split the tag input into title and description
-                    tag_parts = tag_input.split(":d=", 1)
-                    tag_title = tag_parts[0].strip()
+                    # Find the description part
+                    desc_start = tag_input.find(":d=") + 3
                     
-                    # Extract description, handling quoted text properly
-                    description = tag_parts[1].strip()
+                    # Find the end of the description (next colon or end of string)
+                    desc_end = tag_input.find(":", desc_start) if ":" in tag_input[desc_start:] else len(tag_input)
+                    
+                    description = tag_input[desc_start:desc_end].strip()
+                    # Remove surrounding quotes if present
                     if description.startswith('"') and description.endswith('"'):
-                        description = description[1:-1]  # Remove surrounding quotes
+                        description = description[1:-1]
+                        
+                    tag_object["description"] = description
+                
+                # Check for color specification (:c=)
+                if ":c=" in tag_input:
+                    # Find the color part
+                    color_start = tag_input.find(":c=") + 3
                     
-                    updated_tags.append({
-                        "title": tag_title,
-                        "description": description,
-                        "created_at": datetime.datetime.now()
-                    })
-                else:
-                    # Regular tag without description
-                    updated_tags.append({
-                        "title": tag_input,
-                        "created_at": datetime.datetime.now()
-                    })
+                    # Find the end of the color (next colon or end of string)
+                    color_end = tag_input.find(":", color_start) if ":" in tag_input[color_start:] else len(tag_input)
+                    
+                    color = tag_input[color_start:color_end].strip()
+                    # Remove surrounding quotes if present
+                    if color.startswith('"') and color.endswith('"'):
+                        color = color[1:-1]
+                        
+                    tag_object["color"] = color
+                
+                updated_tags.append(tag_object)
         
         # Combine existing (filtered) and new tags
         existing_tags.extend(updated_tags)
