@@ -1,44 +1,64 @@
 import shlex
-import repositories as repo
-import utility as utils
+import os
+from repositories import note_repo, user_repo
+from utility import display_utils, crud_operations, edit_utils, help, user_actions
 import os
 
-note_repo = repo.note_repo
-user_repo = repo.user_repo
 
-display = utils.display_utils
-crud = utils.crud_utils
 
 def edit(args):
     if len(args) != 2:
-        print("Requires at least two arguments: collection and id")
+        print("Usage: edit [note/user] [id]")
         return
+        
+    collection = args[0]
+    try:
+        id = int(args[1])
+    except ValueError:
+        print(f"ID must be an integer: {args[1]}")
+        return
+        
+    if collection == "note":
+        edit_utils.edit_note(id)
+    elif collection == "user":
+        edit_utils.edit_user(id)
     else:
-
-        collection = args.pop(0)
-        id = args.pop(0)
-        # values = args_to_dict()
-
-def delete(args):
-    pass
+        print("Invalid collection type. Use 'note' or 'user'")
 
 if __name__ == "__main__":
+    print("Welcome to MongoNotes CLI")
+    print("Type 'help' for available commands")
+    
+    user_actions.setup()
+    # login later
+
     is_running = True
     while is_running:
-        userinput = input("MongoNotes: ")
-        parts = shlex.split(userinput)
-        cmd = parts.pop(0)
-        match cmd:
-            case "get":
-                crud.get(parts)
-            case "edit":
-                edit(parts)
-            case "delete":
-                crud.delete(parts)
-            case "exit":
-                exit(0)
-            case "help":
-                print("Commands: get, edit, delete, exit")
-                # add options for each command
-            case _:
-                print("Invalid command")
+        try:
+            userinput = input("\nMongoNotes> ")
+            parts = shlex.split(userinput)
+            
+            if not parts:
+                continue
+                
+            cmd = parts.pop(0)
+            match cmd:
+                case "get":
+                    crud_operations.get(parts)
+                case "add":
+                    crud_operations.add(parts)
+                case "edit":
+                    edit(parts)
+                case "delete":
+                    user_actions.delete_with_admin_password(parts)
+                case "exit":
+                    print("Goodbye!")
+                    is_running = False
+                case "help":
+                    help.show_help()
+                case _:
+                    print(f"Invalid command: {cmd}")
+                    print("Type 'help' for available commands")
+        except Exception as e:
+            print(f"Error: {e}")
+            print("Type 'help' for available commands")
