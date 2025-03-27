@@ -6,7 +6,8 @@ def format_note(note):
             tag_list.append(f""" 
         Title: {tag.get('title')} 
         Created At: {tag.get('created_at')}
-        Description: {tag.get('description') if tag.get('description') else 'None'}""")
+        Description: {tag.get('description') if tag.get('description') else 'None'}
+        Color: {tag.get('color') if tag.get('color') else 'None'}""")
         else:
             tag_list.append(str(tag))
     
