@@ -19,6 +19,9 @@ def get_by_search_index(search):
 def get_by_search(searchQuery):
     return notes.find(searchQuery)
 
+def get_latest_notes(limit=5):
+    return notes.find().sort("_id", -1).limit(limit)
+
 def add(title, content, weight, status, tags, owner_id):
     # Create tag objects for each tag title
     tag_objects = []

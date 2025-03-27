@@ -19,6 +19,9 @@ def get_by_id_with_password(id):
 def get_by_search(searchQuery):
     return users.find(searchQuery)
 
+def get_latest_users(limit=5):
+    return users.find().sort("_id", -1).limit(limit)
+
 def add(name, password, is_admin):
     user = {
         "_id": auto_increment.get_next_sequence("Users"),
