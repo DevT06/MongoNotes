@@ -6,7 +6,7 @@ import os
 
 
 
-def edit(args):
+def edit(args, user_id):
     if len(args) != 2:
         print("Usage: edit [note/user] [id]")
         return
@@ -21,16 +21,20 @@ def edit(args):
     if collection == "note":
         edit_utils.edit_note(id)
     elif collection == "user":
-        edit_utils.edit_user(id)
+        edit_utils.edit_user(id, user_id)
     else:
         print("Invalid collection type. Use 'note' or 'user'")
 
 if __name__ == "__main__":
     print("Welcome to MongoNotes CLI")
     print("Type 'help' for available commands")
-    
-    user_actions.setup()
-    # login later
+    user_id = None
+    is_initial_setup = True
+    while not user_id:
+        user_actions.setup(is_initial_setup)
+        is_initial_setup = False
+        # login later
+        user_id = user_actions.login()
 
     is_running = True
     while is_running:
@@ -46,11 +50,11 @@ if __name__ == "__main__":
                 case "get":
                     crud_operations.get(parts)
                 case "add":
-                    crud_operations.add(parts)
+                    crud_operations.add(parts, user_id)
                 case "edit":
-                    edit(parts)
+                    edit(parts, user_id)
                 case "delete":
-                    user_actions.delete_with_admin_password(parts)
+                    user_actions.delete_with_admin_password(parts, user_id)
                 case "exit":
                     print("Goodbye!")
                     is_running = False

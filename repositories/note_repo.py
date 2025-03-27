@@ -207,3 +207,6 @@ def update_by_id(id, title=None, content=None, weight=None, status=None, tags=No
  
 def delete_by_id(id):
     notes.delete_one({"_id": id})
+
+def delete_by_user_id(user_id):
+    notes.delete_many({"owner_id": user_id})

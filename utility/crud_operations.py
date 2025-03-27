@@ -107,7 +107,7 @@ def get(args):
             case _:
                 print("Invalid collection. Use 'notes' or 'users'")
 
-def add(args):
+def add(args, current_user_id):
     if len(args) < 1:
         print("Specify what to add: 'note' or 'user'")
         return
@@ -130,9 +130,10 @@ def add(args):
         content = input("Enter note content: ")
         weight = int(input("Enter note weight (1-5): "))
         status = input("Enter note status (draft/active/archived): ")
-        tags_input = input("Enter tags (comma separated) [TagName:d=\"Description\"]: ")
+        tags_input = input("Enter tags (comma separated) [TagName:d=\"Description\":c=\"Color\"]: ")
         tags = [tag.strip() for tag in tags_input.split(",") if tag.strip()]
-        owner_id = int(input("Enter owner ID: "))
+        #owner_id = int(input("Enter owner ID: "))
+        owner_id = current_user_id
         
         try:
             note_repo.add(title, content, weight, status, tags, owner_id)
