@@ -1,8 +1,8 @@
-// Create database
+// Use database
 use MongoNotes;
 
 // Users
-db.User.insertMany([
+db.Users.insertMany([
   { _id: 1, name: "John Doe", password: "password123", is_admin: true, created_at: new Date() },
   { _id: 2, name: "Jane Smith", password: "securepass456" },
   { _id: 3, name: "Robert Johnson", password: "password789", is_admin: true },
@@ -26,7 +26,7 @@ db.User.insertMany([
 ]);
 
 // Notes (including Tags)
-db.Note.insertMany([
+db.Notes.insertMany([
   { _id: 1, title: "Tech Innovations", owner_id: 1, content: "Exploring the latest in technology.", created_at: new Date(), tags: [
       { title: "Technology", description: "Articles about tech", color: "blue", created_at: new Date() }
     ]
